@@ -29,7 +29,7 @@ public class SueModel extends DefaultedEntityGeoModel<Sue> {
     @Override
     public void setCustomAnimations(Sue animatable, long instanceId, AnimationState<Sue> animationState) {
         super.setCustomAnimations(animatable, instanceId, animationState);
-        GeoBone body = getAnimationProcessor().getBone("body");
+        //GeoBone body = getAnimationProcessor().getBone("body");
         //TODO
     }
 
