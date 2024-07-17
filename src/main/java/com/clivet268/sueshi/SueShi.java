@@ -3,8 +3,7 @@ package com.clivet268.sueshi;
 import com.clivet268.sueshi.Entity.Shi;
 import com.clivet268.sueshi.Entity.Sue;
 import com.clivet268.sueshi.client.model.ShiModel;
-import com.clivet268.sueshi.client.renderer.entity.ShiRenderer;
-import com.clivet268.sueshi.client.renderer.entity.SueRenderer;
+import com.clivet268.sueshi.client.model.SueModel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -37,9 +36,9 @@ public class SueShi
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, MODID);
     public static final DeferredHolder<EntityType<?>, EntityType<Sue>> SUE = ENTITIES.register("sue", () -> EntityType.Builder.of(Sue::new, MobCategory.CREATURE)
-            .sized(2.0F, 0.8F).setShouldReceiveVelocityUpdates(true).build(MODID + "sue"));
+            .sized(1.4F, 0.8F).setShouldReceiveVelocityUpdates(true).build(MODID + "sue"));
     public static final DeferredHolder<EntityType<?>, EntityType<Shi>> SHI = ENTITIES.register("shi", () -> EntityType.Builder.of(Shi::new, MobCategory.CREATURE)
-            .sized(1.4F, 0.6F).setShouldReceiveVelocityUpdates(true).build(MODID + "shi"));
+            .sized(1.0F, 0.6F).setShouldReceiveVelocityUpdates(true).build(MODID + "shi"));
 
     public SueShi(IEventBus modEventBus, ModContainer modContainer)
     {
@@ -61,8 +60,8 @@ public class SueShi
         //TODO is this okay as is? does it need more functionality in the future???
         @SubscribeEvent
         public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerEntityRenderer(SUE.get(), SueRenderer::new);
-            event.registerEntityRenderer(SHI.get(), ShiRenderer::new);
+            event.registerEntityRenderer(SUE.get(), (renderManager) -> new GeoEntityRenderer<>(renderManager, new SueModel()));
+            event.registerEntityRenderer(SHI.get(), (renderManager) -> new GeoEntityRenderer<>(renderManager, new ShiModel()));
         }
     }
 }
