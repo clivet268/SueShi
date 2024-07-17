@@ -36,7 +36,7 @@ import java.util.UUID;
 public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
     private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(Shi.class, EntityDataSerializers.INT);
 
-    RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("sue.walk");
+    RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("shi.walk");
 
 
     @Nullable
@@ -68,7 +68,7 @@ public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
         this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 0.9, 64.0F));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0));
         //TOOO, who to not attack?
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, new Class[]{Wolf.class, AbstractSchoolingFish.class, IronGolem.class, AbstractVillager.class}));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, Wolf.class, AbstractSchoolingFish.class, IronGolem.class, AbstractVillager.class));
     }
 
     @Override
@@ -114,9 +114,9 @@ public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
             float f1 = this.getKnockback(pEntity, damagesource);
             if (f1 > 0.0F && pEntity instanceof LivingEntity livingentity) {
                 livingentity.knockback(
-                        (double)(f1 * 0.5F),
-                        (double)Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
-                        (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
+                        f1 * 0.5F,
+                        Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
+                        -Mth.cos(this.getYRot() * (float) (Math.PI / 180.0))
                 );
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
             }
@@ -135,14 +135,11 @@ public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
     public EntityType<? extends Shi> getType() {
         return SueShi.SHI.get();
     }
-/*
     @Override
     public int getMaxHeadXRot() {
         return 0;
     }
 
-
- */
     public PlayState animController(AnimationState<GeoAnimatable> state) {
         LivingEntity entity = (LivingEntity) state.getAnimatable();
         if (state.isMoving()) {
