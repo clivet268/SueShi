@@ -2,7 +2,6 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"shi.walk": {
-			"loop": true,
 			"animation_length": 1,
 			"bones": {
 				"bone": {
@@ -33,7 +32,7 @@
 							"easing": "easeInSine"
 						},
 						"0.5": {
-							"vector": [0, 1, 0]
+							"vector": [0, 3, 0]
 						},
 						"0.7083": {
 							"vector": [0, 0, 0]
@@ -47,7 +46,7 @@
 							"vector": [1, 1, 1]
 						},
 						"0.25": {
-							"vector": [1, 1, 0.9],
+							"vector": [1, 1, 0.75],
 							"easing": "easeInSine"
 						},
 						"0.5": {
@@ -56,7 +55,7 @@
 							"easingArgs": [2]
 						},
 						"0.7083": {
-							"vector": [1, 1, 0.95]
+							"vector": [1, 1, 0.9]
 						},
 						"1.0": {
 							"vector": [1, 1, 1]
@@ -143,7 +142,7 @@
 							"vector": [0, 0, 0]
 						},
 						"0.25": {
-							"vector": [8, 0, 0],
+							"vector": [13, 0, 0],
 							"easing": "easeInSine"
 						},
 						"0.625": {
@@ -159,7 +158,7 @@
 							"vector": [0, 0, 0]
 						},
 						"0.25": {
-							"vector": [0, 0.6, 0.3],
+							"vector": [0, 0.8, 0.8],
 							"easing": "easeInSine"
 						},
 						"0.625": {
@@ -209,6 +208,75 @@
 							"vector": [1, 1, 1]
 						},
 						"1.0": {
+							"vector": [1, 1, 1]
+						}
+					}
+				}
+			}
+		},
+		"shi.idle": {
+			"animation_length": 2.0417,
+			"bones": {
+				"bone": {
+					"relative_to": {
+						"rotation": "entity"
+					},
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.7917": {
+							"vector": [0, -360, 0],
+							"easing": "easeOutCirc"
+						},
+						"1.8333": {
+							"vector": [0, -360, 5]
+						},
+						"2.0417": {
+							"vector": [0, -360, 0],
+							"easing": "easeInQuad"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.3333": {
+							"vector": [0, 5, 0],
+							"easing": "easeOutQuad"
+						},
+						"1.7917": {
+							"vector": [0, 0, 0],
+							"easing": "easeInQuart"
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.0": {
+							"vector": [1, 0.4, 0.9],
+							"easing": "easeOutExpo"
+						},
+						"1.25": {
+							"vector": [1, 1, 1],
+							"easing": "easeInBounce",
+							"easingArgs": [0.1]
+						},
+						"1.7917": {
+							"vector": [1, 1, 1]
+						},
+						"1.8333": {
+							"vector": [1, 0.8, 1],
+							"easing": "easeInBounce"
+						},
+						"2.0417": {
 							"vector": [1, 1, 1]
 						}
 					}

@@ -34,9 +34,13 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
+    public int ticksUntilIdleAnim = this.random.nextInt(400, 10000);
     private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(Shi.class, EntityDataSerializers.INT);
 
     RawAnimation WALK_ANIM = RawAnimation.begin().thenLoop("shi.walk");
+    RawAnimation IDLE_ANIM = RawAnimation.begin().thenPlay("shi.idle");
+
+    AnimationController<?> controller = new AnimationController<>(this, "controller", 5, this::animController);
 
 
     @Nullable
@@ -67,8 +71,7 @@ public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 0.9, 64.0F));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        //TOOO, who to not attack?
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, Wolf.class, AbstractSchoolingFish.class, IronGolem.class, AbstractVillager.class));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
     @Override
@@ -82,7 +85,6 @@ public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
         pBuilder.define(DATA_REMAINING_ANGER_TIME, 0);
     }
 
-
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
@@ -93,42 +95,6 @@ public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
     public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.readPersistentAngerSaveData(this.level(), pCompound);
-    }
-
-    /*
-        @Override
-        public void tick() {
-        }
-
-     */
-    @Override
-    public boolean doHurtTarget(Entity pEntity) {
-        float f = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        DamageSource damagesource = this.damageSources().mobAttack(this);
-        if (this.level() instanceof ServerLevel serverlevel) {
-            f = EnchantmentHelper.modifyDamage(serverlevel, this.getWeaponItem(), pEntity, damagesource, f);
-        }
-
-        boolean flag = pEntity.hurt(damagesource, f);
-        if (flag) {
-            float f1 = this.getKnockback(pEntity, damagesource);
-            if (f1 > 0.0F && pEntity instanceof LivingEntity livingentity) {
-                livingentity.knockback(
-                        f1 * 0.5F,
-                        Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
-                        -Mth.cos(this.getYRot() * (float) (Math.PI / 180.0))
-                );
-                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
-            }
-
-            if (this.level() instanceof ServerLevel serverlevel1) {
-                EnchantmentHelper.doPostAttackEffects(serverlevel1, pEntity, damagesource);
-            }
-
-            this.playAttackSound();
-        }
-        this.stopBeingAngry();
-        return flag;
     }
 
     @Override
@@ -148,12 +114,24 @@ public class Shi extends PathfinderMob implements NeutralMob, GeoEntity {
             return PlayState.STOP;
         }
     }
-
+    //TODO this will be desynched(?) problem?
+    @Override
+    public void tick() {
+        if(this.level().isClientSide) {
+            if(ticksUntilIdleAnim <= 0 ) {
+                this.navigation.stop();
+                this.controller.tryTriggerAnimation("shi.idle");
+                ticksUntilIdleAnim = this.random.nextInt(400, 10000);
+            }
+            else {
+                ticksUntilIdleAnim--;
+            }
+        }
+        super.tick();
+    }
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 5, this::animController)
-                //.triggerableAnim(getAnimString(TODO), TODO)
-        );
+        controllers.add(controller.triggerableAnim("shi.idle", IDLE_ANIM));
     }
 
     @Override
